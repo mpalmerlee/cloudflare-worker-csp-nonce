@@ -16,6 +16,9 @@ function generateNonce() {
   ].join("/");
 }
 
+const noncePattern = '<%=nonce%>';
+const nonceRegex = new RegExp(noncePattern, "gi")
+
 /**
  * Respond to the request
  * @param {Request} request
@@ -27,7 +30,7 @@ async function handleRequest(request) {
   });
 
   const html = (await originresponse.text())
-    .replace(/DhcnhD3khTMePgXw/gi, nonce)
+    .replace(nonceRegex, nonce)
     .replace(
       'src="https://ajax.cloudflare.com',
       `nonce="${nonce}" src="https://ajax.cloudflare.com`
@@ -59,7 +62,7 @@ async function handleRequest(request) {
     ) {
       // Reuse previously sent Content-Security-Policy
       if (originresponse.status === 304) continue
-      value = value.replace(/DhcnhD3khTMePgXw/gi, nonce);
+      value = value.replace(nonceRegex, nonce);
     }
     clientresponse.headers.set(header, value);
     clientresponse.headers.set("cf-nonce-generator", "HIT");
