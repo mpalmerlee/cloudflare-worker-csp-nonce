@@ -16,7 +16,7 @@ function generateNonce() {
   ].join("/");
 }
 
-const noncePattern = '<%=nonce%>';
+const noncePattern = '{{CSP_NONCE}}';
 const nonceRegex = new RegExp(noncePattern, "gi")
 
 /**
